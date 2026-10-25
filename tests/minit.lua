@@ -1,0 +1,36 @@
+---@diagnostic disable: undefined-field
+local cwd = vim.uv.cwd()
+local root = "/tmp/neohellwal_minit"
+
+if vim.fn.isdirectory(root) == 0 then vim.fn.mkdir(root, "p") end
+
+for _, name in ipairs({ "config", "data", "state", "cache" }) do
+    vim.env[("XDG_%s_HOME"):format(name:upper())] = root .. "/" .. name
+end
+
+local lazypath = root .. "/plugins/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+    vim.fn.system({ "git", "clone", "--filter=blob:none", "https://github.com/folke/lazy.nvim.git", lazypath })
+end
+vim.opt.runtimepath:prepend(lazypath)
+
+require("lazy").setup({
+    { dir = cwd },
+}, {
+    root = root .. "/plugins",
+    dev = {
+        path = debug.getinfo(1).source:sub(2, -21),
+    },
+    profiling = {
+        loader = true,
+        require = true,
+    },
+})
+
+vim.g.neohellwal_debug = true
+require("neohellwal").setup({
+    use_palette = "" .. cwd .. "/tests/colors-template.vim",
+    default_fileformats = false,
+    default_plugins = false,
+})
+vim.cmd.colorscheme("neohellwal")

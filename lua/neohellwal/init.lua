@@ -1,0 +1,60 @@
+---@type NeoHellwal
+---@diagnostic disable-next-line: missing-fields
+local M = {}
+local Config = require("neohellwal.lib.config")
+M.setup = Config.setup
+
+---@return NeoHellwalPalette
+---@param theme_style? ThemeStyles
+---@param minimal_palette? boolean
+---@param extra_colors? CustomColorsOption | fun(C: table<ValidColors[]>?): { [string]: string }
+function M.get_colors(theme_style, minimal_palette, extra_colors)
+    local Palette = require("neohellwal.lib.palette")
+    return Palette.get(theme_style, minimal_palette, extra_colors)
+end
+
+local lock = false -- Avoid g:colors_name reloading
+local did_load = false
+---@param theme_style? ThemeStyles
+function M.load(theme_style)
+    if lock then return end
+    if not Config.did_setup then Config.setup() end
+    if did_load then
+        for name, _ in pairs(package.loaded) do
+            if name:match("^neohellwal.") and not name:match("^neohellwal.lib.") then package.loaded[name] = nil end
+        end
+    end
+
+    local bg = vim.o.background
+    theme_style = (theme_style ~= "dark" and theme_style ~= "light") and bg or theme_style
+    if theme_style ~= bg then
+        if vim.g.colors_name == "neohellwal-" .. theme_style then
+            theme_style = (bg == "light" and theme_style == "dark") and "light" or "dark"
+        else
+            vim.o.background = theme_style
+        end
+    end
+
+    local filename = Config.compiler_opts.filename .. "-" .. theme_style .. Config.compiler_opts.file_ext
+    local compiled_path = Config.compiler_opts.compile_path .. Config.compiler_opts.path_sep .. filename
+
+    lock = true
+    local f = loadfile(compiled_path)
+    if not f then
+        local Compiler = require("neohellwal.lib.compiler")
+        Compiler.compile()
+        f = assert(loadfile(compiled_path), "could not load neohellwal cache.")
+    end
+    f()
+    lock = false
+
+    -- Initialize live reloading on template file changes.
+    vim.schedule(function() require("neohellwal.lib.reloader").init() end)
+
+    did_load = true
+end
+
+vim.api.nvim_create_user_command("NeoHellwalCompile", function() require("neohellwal.lib.compiler").recompile() end, {})
+vim.api.nvim_create_user_command("NeoHellwalInteractive", function() require("neohellwal.lib.interactive").toggle() end, {})
+
+return M

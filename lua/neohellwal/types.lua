@@ -1,0 +1,442 @@
+---@class ValidHighlights
+---@field fg string?
+---@field bg string?
+---@field style HighlightStyles[]?
+---@field link string?
+
+---@class CustomHighlightsOption
+---@field all? { [string]: ValidHighlights? } | fun(C: table<ValidColors[]>?): { [string]: ValidHighlights? }
+---@field dark? { [string]: ValidHighlights? } | fun(C: table<ValidColors[]>?): { [string]: ValidHighlights? }
+---@field light? { [string]: ValidHighlights? } | fun(C: table<ValidColors[]>?): { [string]: ValidHighlights? }
+
+---@class CustomColorsOption
+---@field all? { [string]: string? } | fun(C: table<ValidColors[]>?): { [string]: string? }
+---@field dark? { [string]: string? } | fun(C: table<ValidColors[]>?): { [string]: string? }
+---@field light? { [string]: string? } | fun(C: table<ValidColors[]>?): { [string]: string? }
+
+---@alias BasicModule {enabled: boolean} | boolean
+---@alias ThemeStyles "dark" | "light" | nil
+---@alias HighlightStyles "bold" | "underline" | "undercurl" | "underdouble" | "underdotted" | "underdashed" | "strikethrough" | "reverse" | "inverse" | "italic" | "standout" | "altfont" | "nocombine" | "NONE"
+---@alias ValidColorOptions string<string<ValidColors[]> | fun(C: table<ValidColors[]>?): ValidColors[]? | "">
+---@alias ValidColors
+---| "background"
+---| "foreground"
+---| "cursor"
+---| "color0"
+---| "color1"
+---| "color2"
+---| "color3"
+---| "color4"
+---| "color5"
+---| "color6"
+---| "color7"
+---| "color8"
+---| "color9"
+---| "color10"
+---| "color11"
+---| "color12"
+---| "color13"
+---| "color14"
+---| "color15"
+---| "dim_bg"
+---| "comment"
+---| "cursorline"
+---| "directory"
+---| "diff_added"
+---| "diff_changed"
+---| "diff_removed"
+---| "diff_untracked"
+---| "error"
+---| "hint"
+---| "info"
+---| "unnecessary"
+---| "warn"
+---| "ok"
+---| "inlay_hints"
+---| "variable"
+---| "constant"
+---| "string"
+---| "character"
+---| "number"
+---| "boolean"
+---| "float"
+---| "identifier"
+---| "func"
+---| "statement"
+---| "conditional"
+---| "loop"
+---| "label"
+---| "exception"
+---| "operator"
+---| "keyword"
+---| "debug"
+---| "preproc"
+---| "include"
+---| "define"
+---| "macro"
+---| "precondit"
+---| "type"
+---| "structure"
+---| "storageclass"
+---| "typedef"
+---| "special"
+---| "specialchar"
+---| "tag"
+---| "delimiter"
+---| "specialcomment"
+
+---@class NeoHellwalMinimalPalette
+---@field none string
+---@field background string
+---@field foreground string
+---@field cursor string
+---@field color0 string
+---@field color1 string
+---@field color2 string
+---@field color3 string
+---@field color4 string
+---@field color5 string
+---@field color6 string
+---@field color7 string
+---@field color8 string
+---@field color9 string
+---@field color10 string
+---@field color11 string
+---@field color12 string
+---@field color13 string
+---@field color14 string
+---@field color15 string
+
+---@class NeoHellwalPalette
+---@field none string
+---@field background string
+---@field foreground string
+---@field cursor string
+---@field color0 string
+---@field color1 string
+---@field color2 string
+---@field color3 string
+---@field color4 string
+---@field color5 string
+---@field color6 string
+---@field color7 string
+---@field color8 string
+---@field color9 string
+---@field color10 string
+---@field color11 string
+---@field color12 string
+---@field color13 string
+---@field color14 string
+---@field color15 string
+---@field dim_bg string
+---@field comment string
+---@field cursorline string
+---@field directory string
+---@field diff_added string
+---@field diff_changed string
+---@field diff_removed string
+---@field diff_untracked string
+---@field error string
+---@field hint string
+---@field info string
+---@field unnecessary string
+---@field warn string
+---@field ok string
+---@field inlay_hints string
+---@field variable string
+---@field constant string
+---@field string string
+---@field character string
+---@field number string
+---@field boolean string
+---@field float string
+---@field identifier string
+---@field func string
+---@field statement string
+---@field conditional string
+---@field loop string
+---@field label string
+---@field exception string
+---@field operator string
+---@field keyword string
+---@field debug string
+---@field preproc string
+---@field include string
+---@field define string
+---@field macro string
+---@field precondit string
+---@field type string
+---@field structure string
+---@field storageclass string
+---@field typedef string
+---@field special string
+---@field specialchar string
+---@field tag string
+---@field delimiter string
+---@field specialcomment string
+
+---@class NeoHellwal
+---@field get_colors fun(theme_style: ThemeStyles?, minimal_palette: boolean?, extra_colors: CustomColorsOption | fun(C: table<ValidColors[]>?): { [string]: string }?): NeoHellwalPalette
+---@field load fun(theme_style: ThemeStyles?)
+---@field setup fun(user_config: NeoHellwalOptions?)
+
+---@class Compiler
+---@field compile fun()
+---@field recompile fun(notify: boolean?)
+
+---@class NeoHellwalConfig
+---@field compiler_opts {file_ext: string, filename: string, compile_path: string, path_sep: string}
+---@field default_options NeoHellwalOptions
+---@field options NeoHellwalOptions
+---@field setup fun(user_config: NeoHellwalOptions?)
+---@field reset fun()
+---@field did_setup boolean
+
+---@class NeoHellwalOptions
+---@field use_palette {dark: string?, light: string?} | string?
+---@field transparent_background boolean?
+---@field dim_inactive boolean?
+---@field terminal_colors boolean?
+---@field show_end_of_buffer boolean?
+---@field show_split_lines boolean?
+---@field notify? "all" | "warn" | "error" | "none"
+---@field no_italic boolean?
+---@field no_bold boolean?
+---@field no_underline boolean?
+---@field no_undercurl boolean?
+---@field no_strikethrough boolean?
+---@field styles NeoHellwalStyles?
+---@field custom_colors? CustomColorsOption | fun(C: table<ValidColors[]>?): CustomColorsOption?
+---@field custom_highlights? CustomHighlightsOption | fun(C: table<ValidColors[]>?): CustomHighlightsOption?
+---@field default_fileformats boolean?
+---@field default_plugins boolean?
+---@field fileformats NeoHellwalFileformats?
+---@field plugins NeoHellwalPlugins?
+
+---@class NeoHellwalStyles
+---@field comments HighlightStyles[]?
+---@field conditionals HighlightStyles[]?
+---@field loops HighlightStyles[]?
+---@field functions HighlightStyles[]?
+---@field keywords HighlightStyles[]?
+---@field includes HighlightStyles[]?
+---@field strings HighlightStyles[]?
+---@field variables HighlightStyles[]?
+---@field numbers HighlightStyles[]?
+---@field booleans HighlightStyles[]?
+---@field types HighlightStyles[]?
+---@field operators HighlightStyles[]?
+
+---@class NeoHellwalFileformats
+---@field c_cpp BasicModule?
+---@field c_sharp BasicModule?
+---@field clojure BasicModule?
+---@field cmake BasicModule?
+---@field common_lisp BasicModule?
+---@field css BasicModule?
+---@field dart BasicModule?
+---@field diff BasicModule?
+---@field elixir BasicModule?
+---@field erlang BasicModule?
+---@field git_commit BasicModule?
+---@field go BasicModule?
+---@field haskell BasicModule?
+---@field help BasicModule?
+---@field html BasicModule?
+---@field ini BasicModule?
+---@field java BasicModule?
+---@field javascript BasicModule?
+---@field javascript_react BasicModule?
+---@field json BasicModule?
+---@field kotlin BasicModule?
+---@field latex BasicModule?
+---@field less BasicModule?
+---@field lua BasicModule?
+---@field makefile BasicModule?
+---@field markdown BasicModule?
+---@field matlab BasicModule?
+---@field objectivec BasicModule?
+---@field ocaml BasicModule?
+---@field perl BasicModule?
+---@field php BasicModule?
+---@field powershell BasicModule?
+---@field python BasicModule?
+---@field restructuredtext BasicModule?
+---@field ruby BasicModule?
+---@field rust BasicModule?
+---@field sass BasicModule?
+---@field scala BasicModule?
+---@field shell BasicModule?
+---@field swift BasicModule?
+---@field toml BasicModule?
+---@field typescript BasicModule?
+---@field viml BasicModule?
+---@field xml BasicModule?
+---@field yaml BasicModule?
+---@field zsh BasicModule?
+
+---@class NeoHellwalPlugins
+---@field aerial BasicModule?
+---@field ale BasicModule?
+---@field alpha BasicModule?
+---@field barbar BasicModule?
+---@field beacon {enabled: boolean, color: ValidColorOptions?} | boolean?
+---@field coc BasicModule?
+---@field colorful_winsep {enabled: boolean, color: ValidColorOptions?} | boolean?
+---@field dadbod_ui BasicModule?
+---@field dap BasicModule?
+---@field dap_ui BasicModule?
+---@field dashboard BasicModule?
+---@field diffview BasicModule?
+---@field dropbar {enabled: boolean, colored_text: boolean?}?
+---@field fern BasicModule?
+---@field flash {enabled: boolean, style: HighlightStyles[]?} | boolean?
+---@field fzf BasicModule?
+---@field git_gutter BasicModule?
+---@field gitsigns BasicModule?
+---@field glyph_palette BasicModule?
+---@field grug_far BasicModule?
+---@field harpoon BasicModule?
+---@field headlines BasicModule?
+---@field hop {enabled: boolean, style: HighlightStyles[]?} | boolean?
+---@field illuminate {enabled: boolean, lsp: boolean?, style: HighlightStyles[]?} | boolean?
+---@field indent_blankline {enabled: boolean, scope_color: ValidColorOptions?, colored_indent_levels: boolean?} | boolean?
+---@field indentmini {enabled: boolean, scope_color: ValidColorOptions?, current_scope_color: ValidColorOptions?} | boolean?
+---@field lazy BasicModule?
+---@field lazygit BasicModule?
+---@field leap {enabled: boolean, style: HighlightStyles[]?} | boolean?
+---@field lir {enabled: boolean, git_status: boolean?} | boolean?
+---@field lsp NeoHellwalPluginsLSP | boolean?
+---@field lspsaga {enabled: boolean, dim_folder: boolean?, dim_filename: boolean?, dim_separator: boolean?, winbar_style: HighlightStyles[]?} | boolean?
+---@field markdown BasicModule?
+---@field mason BasicModule?
+---@field navbuddy BasicModule?
+---@field navic {enabled: boolean, dim_text: boolean?, hide_separator: boolean?, bg_color: ValidColorOptions?} | boolean?
+---@field neogit BasicModule?
+---@field neotest BasicModule?
+---@field neotree BasicModule?
+---@field netrw BasicModule?
+---@field noice BasicModule?
+---@field NormalNvim BasicModule?
+---@field notifier BasicModule?
+---@field notify BasicModule?
+---@field nvim_cmp BasicModule?
+---@field nvimtree BasicModule?
+---@field octo BasicModule?
+---@field overseer BasicModule?
+---@field pounce {enabled: boolean, style: HighlightStyles[]?} | boolean?
+---@field rainbow BasicModule?
+---@field sandwich BasicModule?
+---@field scrollbar BasicModule?
+---@field snacks {enabled: boolean, style: "classic" | "nvchad" | nil?, scope_color: ValidColorOptions?, current_scope_color: ValidColorOptions?} | boolean?
+---@field sneak {enabled: boolean, sneak_color: ValidColorOptions?, style: HighlightStyles[]?} | boolean?
+---@field surround BasicModule?
+---@field symbols_outline BasicModule?
+---@field telekasten BasicModule?
+---@field telescope {enabled: boolean, style: "classic" | "nvchad" | nil?} | boolean?
+---@field todo_comments {enabled: boolean, style: {fix: HighlightStyles[]?, hack: HighlightStyles[]?, todo: HighlightStyles[]?, note: HighlightStyles[]?, perf: HighlightStyles[]?, test: HighlightStyles[]?, warn: HighlightStyles[]?}?} | boolean?
+---@field ts_context {enabled: boolean, dim_background: boolean?, style: HighlightStyles[]?} | boolean?
+---@field treesitter BasicModule?
+---@field trouble BasicModule?
+---@field ts_rainbow BasicModule?
+---@field ts_rainbow2 BasicModule?
+---@field ufo BasicModule?
+---@field undotree BasicModule?
+---@field vimwiki BasicModule?
+---@field which_key BasicModule?
+---@field window_picker {enabled: boolean, color: ValidColorOptions?} | boolean?
+---@field yanky BasicModule?
+---@field mini NeoHellwalPluginsMiniNvim?
+
+---@class NeoHellwalPluginsLSP
+---@field enabled boolean
+---@field virtual_text {errors: HighlightStyles[]?, hints: HighlightStyles[]?, information: HighlightStyles[]?, ok: HighlightStyles[]?, warnings: HighlightStyles[]?, unnecessary: HighlightStyles[]?}?
+---@field underlines {errors: HighlightStyles[]?, hints: HighlightStyles[]?, information: HighlightStyles[]?, ok: HighlightStyles[]?, warnings: HighlightStyles[]?}?
+---@field inlay_hints {background: boolean?, style: HighlightStyles[]?}?
+
+---@class NeoHellwalPluginsMiniNvim
+---@field animate BasicModule?
+---@field clue BasicModule?
+---@field completion {enabled: boolean, parameter_style: HighlightStyles[]?} | boolean?
+---@field cursorword {enabled: boolean, style: HighlightStyles[]?} | boolean?
+---@field deps BasicModule?
+---@field diff BasicModule?
+---@field files BasicModule?
+---@field hipatterns {enabled: boolean, style: {fixme: HighlightStyles[]?, hack: HighlightStyles[]?, todo: HighlightStyles[]?, note: HighlightStyles[]?}?} | boolean?
+---@field icons BasicModule?
+---@field indentscope {enabled: boolean, scope_color: ValidColorOptions?} | boolean?
+---@field jump {enabled: boolean, style: HighlightStyles[]?} | boolean?
+---@field jump2d {enabled: boolean, style: HighlightStyles[]?} | boolean?
+---@field map BasicModule?
+---@field notify BasicModule?
+---@field operators BasicModule?
+---@field pick BasicModule?
+---@field snippets {enabled: boolean, style: HighlightStyles[]?} | boolean?
+---@field starter BasicModule?
+---@field statusline {enabled: boolean, mode_colors: {normal: ValidColorOptions?, visual: ValidColorOptions?, insert: ValidColorOptions?, command: ValidColorOptions?, replace: ValidColorOptions?, other: ValidColorOptions?}?} | boolean?
+---@field surround BasicModule?
+---@field tabline BasicModule?
+---@field test BasicModule?
+---@field trailspace {enabled: boolean, color: ValidColorOptions?} | boolean?
+
+---@class NeoHellwalPluginsBarbecue
+---@field default_options NeoHellwalPluginsBarbecueOptions
+---@field options NeoHellwalPluginsBarbecueOptions
+---@field setup fun(user_config: NeoHellwalPluginsBarbecueOptions?)
+---@field get fun(): table
+
+---@class NeoHellwalPluginsBarbecueOptions
+---@field dim_background boolean?
+---@field dim_context boolean?
+---@field dim_dirname boolean?
+---@field hide_separator boolean?
+---@field basename_style HighlightStyles[]?
+---@field context_style HighlightStyles[]?
+---@field dirname_style HighlightStyles[]?
+---@field theme table | function<table>
+
+---@class NeoHellwalPluginsFeline
+---@field default_options NeoHellwalPluginsFelineOptions
+---@field options NeoHellwalPluginsFelineOptions
+---@field setup fun(user_config: NeoHellwalPluginsFelineOptions?)
+---@field get fun(): table
+
+---@class NeoHellwalPluginsFelineOptions
+---@field assets {left_separator: string?, right_separator: string?, mode_icon: string?, dir: string?, file: string?, lsp: {server: string?, error: string?, warning: string?, info: string?, hint: string?}?, git: {branch: string?, added: string?, changed: string?, removed: string?}? }
+---@field mode_colors table<string, table<string, string<ValidColors[]>>>
+---@field sett {text: string<ValidColors[]>?, bkg: string<ValidColors[]>?, diffs: string<ValidColors[]>?, extras: string<ValidColors[]>?, curr_file: string<ValidColors[]>?, curr_dir: string<ValidColors[]>?, show_modified: boolean?, show_lazy_updates: boolean?}
+---@field view {lsp: {progress: boolean?, name: boolean?, exclude_lsp_names: table?, separator: string?}?}
+
+---@class NeoHellwalPluginsLualine
+---@field default_options NeoHellwalPluginsLualineOptions
+---@field options NeoHellwalPluginsLualineOptions
+---@field setup fun(user_config: NeoHellwalPluginsLualineOptions?)
+---@field get fun(): table
+
+---@class NeoHellwalPluginsLualineOptions
+---@field mode_colors {normal: ValidColorOptions?, visual: ValidColorOptions?, insert: ValidColorOptions?, command: ValidColorOptions?, replace: ValidColorOptions?, terminal: ValidColorOptions?}
+---@field styles {a: HighlightStyles[]?, b: HighlightStyles[]?, c: HighlightStyles[]?, x: HighlightStyles[]?, y: HighlightStyles[]?, z: HighlightStyles[]?}
+
+---@class NeoHellwalPluginsReactiveOptions
+---@field color_percentage number
+---@field mode_colors {visual: ValidColorOptions?, insert: ValidColorOptions?, replace: ValidColorOptions?, change: ValidColorOptions?, delete: ValidColorOptions?, pending: ValidColorOptions?, yank: ValidColorOptions?}
+
+---@class NeoHellwalPluginsFidgetGroups
+---@field FidgetDone table?
+---@field FidgetGroup table?
+---@field FidgetIcon table?
+---@field FidgetNormal table?
+---@field FidgetProgress table?
+---@field FidgetSeparator table?
+
+---@class NeoHellwalPluginsLightlineOptions
+---@field mode_colors {normal: ValidColorOptions?, visual: ValidColorOptions?, insert: ValidColorOptions?, command: ValidColorOptions?, replace: ValidColorOptions?, terminal: ValidColorOptions?}
+
+---@class NeoHellwalPluginsClapOptions
+---@field colors {indicator: ValidColorOptions?, spinner: ValidColorOptions?, selected: ValidColorOptions?, current_selection: ValidColorOptions?}
+---@field styles {indicator: HighlightStyles[]?, spinner: HighlightStyles[]?, selected: HighlightStyles[]?, current_selection: HighlightStyles[]?}
+
+---@class NeoHellwalPluginsAirlineOptions
+---@field mode_colors {normal: ValidColorOptions?, visual: ValidColorOptions?, insert: ValidColorOptions?, commandline: ValidColorOptions?, replace: ValidColorOptions?, terminal: ValidColorOptions?}
+---@field cterm_colors {normal: number?, visual: number?, insert: number?, commandline: number?, replace: number?, terminal: number?}
+---@field styles {a: HighlightStyles[]?, b: HighlightStyles[]?, c: HighlightStyles[]?, x: HighlightStyles[]?, y: HighlightStyles[]?, z: HighlightStyles[]?}
