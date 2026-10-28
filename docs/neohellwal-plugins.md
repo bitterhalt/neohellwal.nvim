@@ -1,4 +1,4 @@
-# 🎨 Plugins
+# Plugins
 
 NeoHellwal provides theme support for other plugins in the Vim/Neovim ecosystem. Most of them can be configured under the `plugins` table on NeoHellwal's `setup()` function as it is shown below:
 

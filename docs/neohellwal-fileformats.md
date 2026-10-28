@@ -1,4 +1,4 @@
-# 🎨 Fileformats
+# Fileformats
 
 NeoHellwal provides theme support for extra syntax highlighting groups that are not dependent on treesitter. This is useful for users that don't have treesitter installed but still want a somewhat decent looking syntax highlighting.
 

@@ -1,4 +1,4 @@
-# 🎨 Colors
+# Colors
 
 NeoHellwal has a dedicated option for customizing colors within the `setup()` function. It is called `custom_colors` and it gives ability to create, modify and overwrite colors by using either simple tables or complete lua functions that can update the colors for either `dark` or `light` theme variants separately or for both of them all at once.
 

@@ -1,4 +1,4 @@
-# 🎨 Color Utilities
+# Color Utilities
 
 ## Manipulation Functions
 

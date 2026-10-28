@@ -1,4 +1,4 @@
-# 🎨 Highlight Groups
+# Highlight Groups
 
 NeoHellwal has a dedicated option for customizing highlight groups within the `setup()` function. It is called `custom_highlights` and it gives the ability to create, modify and overwrite highlights by using either simple tables or complete lua functions that can update the highlights for either `dark` or `light` theme variants separately or for both of them all at once.
 

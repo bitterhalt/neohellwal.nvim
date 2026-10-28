@@ -1,4 +1,4 @@
-# 🎨 Configuration
+# Configuration
 
 Here's the default configuration for NeoHellwal, note that there's no need to call `setup()` if you don't want to change the default options and settings.
 

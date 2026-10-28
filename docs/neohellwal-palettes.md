@@ -1,4 +1,4 @@
-# 🎨 Palettes
+# Palettes
 
 The `use_palette` is the gateway to all of NeoHellwal's palette configuration, with it you select which custom palette you want NeoHellwal to use, as well as selecting built-in palettes from the plugin source code.
 
